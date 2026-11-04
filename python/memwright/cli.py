@@ -1,8 +1,21 @@
 import typer
 from rich import print
 from rich.table import Table
+from pathlib import Path
 
-app = typer.Typer(help="Offline game hacking toolkit")
+__REPO_ROOT__ = Path(__file__).parent.parent.parent
+__README__ = __REPO_ROOT__ / "README.md"
+
+with open(__README__, "r") as f:
+    __README_CONTENT__ = f.read()
+
+content = __README_CONTENT__
+content = content[content.find("<description>")+len("<description>"):
+                  content.find("</description>")]
+
+app = typer.Typer(help=content,
+                  no_args_is_help=True,
+                  rich_markup_mode="markdown")
 
 
 @app.command()

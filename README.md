@@ -1,6 +1,8 @@
 # memwright
 
+<description>
 Offline game hacking toolkit with a **Rust** core (memory read/write/scan via PyO3) and a **Python** layer (local LLM agents, PyTorch models).
+</description>
 
 ```
 core/               Rust crate -> memwright._core
