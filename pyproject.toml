@@ -1,0 +1,23 @@
+[build-system]
+requires = ["maturin>=1.5,<2"]
+build-backend = "maturin"
+
+[project]
+name = "gamehack"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = ["typer>=0.12", "rich>=13", "pydantic>=2", "numpy>=1.26"]
+
+[project.optional-dependencies]
+llm = ["llama-cpp-python>=0.2"]
+nn = ["torch>=2.2"]
+dev = ["pytest>=8", "ruff>=0.5"]
+
+[project.scripts]
+gamehack = "gamehack.cli:app"
+
+[tool.maturin]
+manifest-path = "core/Cargo.toml"
+python-source = "python"
+module-name = "gamehack._core"
+features = ["pyo3/extension-module"]
