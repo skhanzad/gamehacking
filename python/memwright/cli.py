@@ -2,6 +2,7 @@ import typer
 from rich import print
 from rich.table import Table
 from pathlib import Path
+from memwright.utility.process import get_ps_fuzzy, list_all_processes
 
 __REPO_ROOT__ = Path(__file__).parent.parent.parent
 __README__ = __REPO_ROOT__ / "README.md"
@@ -20,9 +21,8 @@ app = typer.Typer(help=content,
 @app.command()
 def ls():
     """List all running processes."""
-    from memwright import list_processes
     t = Table("PID", "Name")
-    for p in list_processes():
+    for p in list_all_processes():
         t.add_row(str(p.pid), p.name)
     print(t)
 
@@ -30,9 +30,8 @@ def ls():
 @app.command()
 def ps(filter: str = typer.Argument(None, help="Substring to match name/cmdline")):
     """List running processes."""
-    from memwright import list_processes
     t = Table("pid", "name", "cmdline")
-    for p in list_processes(filter):
+    for p in get_ps_fuzzy(filter):
         t.add_row(str(p.pid), p.name, p.cmdline[:80])
     print(t)
 
