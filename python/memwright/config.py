@@ -3,7 +3,7 @@ from pydantic import BaseModel
 
 
 class Settings(BaseModel):
-    model_dir: Path = Path.home() / ".gamehack" / "models"
+    model_dir: Path = Path.home() / ".memwright" / "models"
     llm_model: str = "model.gguf"  # local GGUF for llama.cpp, no network
     llm_ctx: int = 8192
     device: str = "cpu"

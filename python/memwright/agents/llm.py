@@ -1,5 +1,5 @@
 """Local LLM wrapper (llama.cpp). Runs fully offline."""
-from gamehack.config import settings
+from memwright.config import settings
 
 
 class LocalLLM:

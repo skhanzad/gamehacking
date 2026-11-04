@@ -1,6 +1,6 @@
 """Cheat-Engine-style iterative value scanning on top of the Rust core."""
 import struct
-from gamehack import Process
+from memwright import Process
 
 FMT = {"i32": "<i", "i64": "<q", "f32": "<f", "f64": "<d"}
 

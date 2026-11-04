@@ -1,4 +1,4 @@
-from gamehack import scan_bytes
+from memwright import scan_bytes
 
 
 def test_scan_bytes():

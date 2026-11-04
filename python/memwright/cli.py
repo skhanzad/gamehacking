@@ -8,7 +8,7 @@ app = typer.Typer(help="Offline game hacking toolkit")
 @app.command()
 def regions(pid: int):
     """List the target process's memory regions."""
-    from gamehack import Process
+    from memwright import Process
     t = Table("start", "end", "perms")
     for s, e, p in Process(pid).regions():
         t.add_row(hex(s), hex(e), p)
@@ -18,7 +18,7 @@ def regions(pid: int):
 @app.command()
 def scan(pid: int, value: int, dtype: str = "i32"):
     """Run a first scan for an exact value."""
-    from gamehack.scanner.session import ScanSession
+    from memwright.scanner.session import ScanSession
     s = ScanSession(pid, dtype)
     n = s.first_scan(value)
     print(f"[green]{n}[/] candidates")

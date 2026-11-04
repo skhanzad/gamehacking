@@ -1,7 +1,7 @@
 """Agent loop: the LLM picks scanner actions (tool calls) to find a game value."""
 import json
-from gamehack.agents.llm import LocalLLM
-from gamehack.scanner.session import ScanSession
+from memwright.agents.llm import LocalLLM
+from memwright.scanner.session import ScanSession
 
 SYSTEM = """You help find variables in a running single-player game's memory.
 Reply with JSON only: {"action": "first_scan"|"next_scan"|"done", "value": <number>, "note": "..."}"""
