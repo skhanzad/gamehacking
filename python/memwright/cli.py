@@ -17,6 +17,25 @@ app = typer.Typer(help=content,
                   no_args_is_help=True,
                   rich_markup_mode="markdown")
 
+@app.command()
+def ls():
+    """List all running processes."""
+    from memwright import list_processes
+    t = Table("PID", "Name")
+    for p in list_processes():
+        t.add_row(str(p.pid), p.name)
+    print(t)
+
+
+@app.command()
+def ps(filter: str = typer.Argument(None, help="Substring to match name/cmdline")):
+    """List running processes."""
+    from memwright import list_processes
+    t = Table("pid", "name", "cmdline")
+    for p in list_processes(filter):
+        t.add_row(str(p.pid), p.name, p.cmdline[:80])
+    print(t)
+
 
 @app.command()
 def regions(pid: int):
