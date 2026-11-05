@@ -66,11 +66,22 @@ impl Process {
         use rayon::prelude::*;
         let regions: Vec<_> = self.regions_internal().map_err(os_err)?
             .into_iter().filter(|r| r.perms.starts_with("rw")).collect();
-        Ok(regions.par_iter().flat_map(|r| {
-            self.read_internal(r.start, r.end - r.start)
+        // Read every region; some (e.g. guard pages, [vvar]) legitimately fail.
+        let results: Vec<_> = regions.par_iter()
+            .map(|r| self.read_internal(r.start, r.end - r.start)
                 .map(|buf| crate::scan::find_all(&buf, &pattern).into_iter()
-                    .map(|o| r.start + o).collect::<Vec<_>>())
-                .unwrap_or_default()
-        }).collect())
+                    .map(|o| r.start + o).collect::<Vec<_>>()))
+            .collect();
+
+        // Permission errors mean we can't read the process at all: report it
+        // instead of silently returning zero matches.
+        if let Some(Err(e)) = results.iter().find(|r| matches!(r,
+            Err(e) if e.raw_os_error() == Some(libc::EPERM)))
+        {
+            return Err(PyOSError::new_err(format!(
+                "cannot read memory of pid {}: {e}. Allow it with \
+                 `sudo sysctl kernel.yama.ptrace_scope=0` or run as root", self.pid)));
+        }
+        Ok(results.into_iter().filter_map(Result::ok).flatten().collect())
     }
 }
